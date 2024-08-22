@@ -5,13 +5,13 @@ from langchain.chains import LLMChain
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
+
 load_dotenv()
 
-# Initialize the GPT-4 model
+
 llm = ChatOpenAI(model_name="gpt-4", temperature=0.2)
 
-# Create a prompt template for ATS keywords extraction
+# Prompt template for ATS keywords extraction
 ats_prompt = ChatPromptTemplate.from_template(
     """You are an expert ATS (Applicant Tracking System) analyst. Given the following job description, identify and list the top 5 most important technical terms or skills that should be present in a resume for a good ATS match. Only provide the list of 5 terms, nothing else.
 
@@ -21,7 +21,7 @@ Job Description:
 Top 5 Technical Terms:"""
 )
 
-# Create an LLMChain for ATS keywords extraction
+# LLMChain for ATS keywords extraction
 ats_chain = LLMChain(llm=llm, prompt=ats_prompt)
 
 # Function to process job description and get top 5 terms
@@ -34,7 +34,7 @@ def get_top_5_terms(job_description):
 
     return output_text.strip().split("\n")
 
-# Create a prompt template for cover letter modification
+# prompt template for cover letter modification
 cover_letter_prompt = ChatPromptTemplate.from_template(
     """You are an expert in crafting professional cover letters. Given the job description and the existing cover letter below, modify the cover letter to align with the job description while maintaining the original flow and tone of the letter. 
     Only make changes that improve relevance to the new job role. 
@@ -50,7 +50,7 @@ Original Cover Letter:
 Modified Cover Letter:"""
 )
 
-# Create an LLMChain for cover letter modification
+# LLMChain for cover letter modification
 cover_letter_chain = LLMChain(llm=llm, prompt=cover_letter_prompt)
 
 # Function to modify the cover letter based on the job description
@@ -63,7 +63,7 @@ def modify_cover_letter(job_description, cover_letter):
     modified_cover_letter = result.get("text", "") if isinstance(result, dict) else result
     return modified_cover_letter.strip()
 
-# Create a prompt template for visa sponsorship detection
+# prompt template for visa sponsorship detection
 visa_sponsorship_prompt = ChatPromptTemplate.from_template(
     """You are an expert in analyzing job descriptions. Given the job description below, determine if the company offers visa sponsorship for this position. 
     If the job description mentions that sponsorship is available, or that the company sponsors visas, state "This job offers visa sponsorship."
@@ -76,7 +76,7 @@ Job Description:
 Visa Sponsorship Information:"""
 )
 
-# Create an LLMChain for visa sponsorship detection
+# LLMChain for visa sponsorship detection
 visa_sponsorship_chain = LLMChain(llm=llm, prompt=visa_sponsorship_prompt)
 
 # Function to check visa sponsorship availability using natural language understanding
@@ -110,6 +110,7 @@ def apply_feedback_to_cover_letter(modified_cover_letter, feedback):
     })
     updated_cover_letter = result.get("text", "") if isinstance(result, dict) else result
     return updated_cover_letter.strip()
+
 # Streamlit App
 def main():
     st.title("Job Application Assistant")
